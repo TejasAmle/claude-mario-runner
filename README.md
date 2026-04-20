@@ -3,10 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/claude-mario-runner.svg)](https://www.npmjs.com/package/claude-mario-runner)
 [![CI](https://github.com/TejasAmle/claude-mario-runner/actions/workflows/ci.yml/badge.svg)](https://github.com/TejasAmle/claude-mario-runner/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/claude-mario-runner.svg)](./LICENSE)
+[![leaderboard](https://img.shields.io/badge/🏆_global_leaderboard-claude--mario--runner.vercel.app-cc785c)](https://claude-mario-runner.vercel.app)
 
 A Chrome-dino-style infinite runner that lives in your terminal. Claude Code themed — dodge bugs, merge conflicts, walls, exceptions, and drones.
 
-📦 **npm:** https://www.npmjs.com/package/claude-mario-runner
+🏆 **Leaderboard:** https://claude-mario-runner.vercel.app &nbsp;·&nbsp; 📦 **npm:** https://www.npmjs.com/package/claude-mario-runner
 
 ```
 score 0                              tier easy                           best  0
@@ -53,9 +54,11 @@ npm run dev
 
 ## Global leaderboard
 
-Every new personal best auto-submits to the public board at **https://claude-mario-runner.vercel.app**.
+[![leaderboard screenshot](./docs/leaderboard.png)](https://claude-mario-runner.vercel.app)
 
-The first time you play, you'll be prompted for a handle (2–24 chars, lowercase letters/digits/dash). Leave it blank to play offline — nothing is submitted.
+Live at **[claude-mario-runner.vercel.app](https://claude-mario-runner.vercel.app)** — top scores across the world, light/dark toggle, retro pixel cursor, background chiptune.
+
+Every new personal best auto-submits to the public board. The first time you play, you'll be prompted for a handle (2–24 chars, lowercase letters/digits/dash). Leave it blank to play offline — nothing is submitted.
 
 ```bash
 claude-mario login <handle>    # set a handle locally

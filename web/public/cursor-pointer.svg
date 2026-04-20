@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" shape-rendering="crispEdges">
+  <!--
+    NES-style pointing hand (index finger up). White fill + black outline.
+    Hotspot at the fingertip (~12,2) — set in CSS.
+  -->
+  <path
+    d="M 10 2
+       L 14 2
+       L 14 10
+       L 16 10 L 16 8 L 18 8 L 18 10
+       L 20 10 L 20 9 L 22 9 L 22 13
+       L 22 20 L 8 20 L 8 15
+       L 6 12 L 8 11 L 10 13
+       Z"
+    fill="#ffffff"
+    stroke="#000000"
+    stroke-width="1.5"
+    stroke-linejoin="miter"
+  />
+</svg>

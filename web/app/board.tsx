@@ -134,9 +134,6 @@ export function Board({ currentVersion }: { currentVersion: string }): React.Rea
                 <th scope="col" className="col-score">
                   score
                 </th>
-                <th scope="col" className="col-tier">
-                  tier
-                </th>
                 <th scope="col" className="col-games">
                   games
                 </th>
@@ -148,7 +145,6 @@ export function Board({ currentVersion }: { currentVersion: string }): React.Rea
                 <td className="r-rank">──</td>
                 <td className="r-player">──────</td>
                 <td className="r-score">─────</td>
-                <td className="r-tier">────</td>
                 <td className="r-games">─────</td>
                 <td className="r-seen">─────────</td>
               </tr>
@@ -190,15 +186,12 @@ function Row({ entry }: { entry: LeaderboardEntry }): React.ReactElement {
           )}
         </td>
         <td className="r-score">{formatScore(entry.score)}</td>
-        <td className="r-tier">{entry.tier}</td>
         <td className="r-games">{entry.gamesPlayed}</td>
         <td className="r-seen">{relativeTime(entry.lastSeenTs)}</td>
       </tr>
       <tr className="mobile-meta-row" aria-hidden>
         <td />
-        <td colSpan={5}>
-          {entry.tier} · {relativeTime(entry.lastSeenTs)}
-        </td>
+        <td colSpan={4}>{relativeTime(entry.lastSeenTs)}</td>
       </tr>
     </>
   );
@@ -218,9 +211,6 @@ function LoadingTable(): React.ReactElement {
             </td>
             <td className="r-score">
               <span className="skeleton-block">█████</span>
-            </td>
-            <td className="r-tier">
-              <span className="skeleton-block">████</span>
             </td>
             <td className="r-games">
               <span className="skeleton-block">███</span>
@@ -263,9 +253,8 @@ function ErrorPanel({
 }
 
 function formatScore(n: number): string {
-  // Zero-pad to 6 digits and thousands-separator with commas → "02,450" shape.
-  const padded = String(n).padStart(6, '0');
-  return padded.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // Thousands-separator with commas (no zero-pad) → "563", "1,337", "12,450".
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 function relativeTime(unixSec: number): string {

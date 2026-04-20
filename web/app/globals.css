@@ -1,23 +1,60 @@
 /* ----------------------------------------------------------------------- *
  * claude-mario-runner leaderboard — palette + typography.
- * All color decisions live in CSS custom properties so a future light-mode
- * could drop in by overriding :root.
+ *
+ * Two themes, both Claude-inspired:
+ *   - light: signature cream (#F5F4EF) + copper accent (#C96442)
+ *   - dark : warm near-black (#1D1B16) + copper accent (#D97757)
+ *
+ * No brown body background anywhere. Theme is picked by `data-theme` on
+ * <html>, set synchronously by the inline <script> in layout.tsx to avoid
+ * FOUC, then toggleable via <ThemeToggle>.
  * ----------------------------------------------------------------------- */
 
 :root {
-  --bg: #1a1815;
-  --bg-elev: #252320;
-  --border: #3a352e;
-  --text: #f5f4ef;
-  --text-dim: #8b857a;
-  --accent: #cc785c;
-  --accent-soft: #e89a7d;
-  --accent-deeper: #a15843;
-  --success: #8fbc6a;
-  --danger: #d9684b;
-
+  --sans:
+    var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --serif:
+    var(--font-serif), 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --mono:
-    ui-monospace, 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+    var(--font-mono), ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas,
+    monospace;
+}
+
+/* -------- light (Claude cream) -------- */
+
+:root,
+html[data-theme='light'] {
+  --bg: #f5f4ef;
+  --bg-elev: #ebe9e1;
+  --bg-panel: #ffffff;
+  --border: #e3dfd4;
+  --border-strong: #c9c3b3;
+  --text: #2d2a26;
+  --text-dim: #7a756c;
+  --accent: #c96442;
+  --accent-soft: #e08768;
+  --accent-deeper: #a04e30;
+  --success: #6f9a47;
+  --danger: #c14a2e;
+
+  color-scheme: light;
+}
+
+/* -------- dark (warm near-black) -------- */
+
+html[data-theme='dark'] {
+  --bg: #1d1b16;
+  --bg-elev: #26231d;
+  --bg-panel: #221f1a;
+  --border: #332f27;
+  --border-strong: #4a4438;
+  --text: #f5f4ef;
+  --text-dim: #9c9587;
+  --accent: #d97757;
+  --accent-soft: #eb9e82;
+  --accent-deeper: #a95638;
+  --success: #8fbc6a;
+  --danger: #e37a5c;
 
   color-scheme: dark;
 }
@@ -34,12 +71,49 @@ body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--mono);
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background 220ms ease,
+    color 220ms ease;
+}
+
+/* ----------------------- NES pixel cursors -------------- *
+ * Hotspots chosen to match the visible "tip":
+ *   default arrow → (2,2) (top-left of arrow head)
+ *   pointer hand  → (9,2) (tip of the index finger)
+ * Browsers that can't render SVG cursors gracefully fall back to the
+ * keyword after the comma (`default` / `pointer`).
+ * ------------------------------------------------------- */
+
+body {
+  cursor: url('/cursor-default.svg') 2 2, default;
+}
+a,
+button,
+select,
+[role='button'],
+label[for],
+summary,
+.copy-btn,
+.retry-btn,
+.theme-toggle,
+.bgm-toggle,
+.version-select,
+.board tbody tr {
+  cursor: url('/cursor-pointer.svg') 9 2, pointer;
+}
+input[type='text'],
+textarea {
+  cursor: text;
+}
+button:disabled,
+[aria-disabled='true'] {
+  cursor: url('/cursor-default.svg') 2 2, not-allowed;
 }
 
 a {
@@ -56,55 +130,152 @@ button:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 0;
+  border-radius: 2px;
 }
 
 main {
   max-width: 760px;
   margin: 0 auto;
-  padding: 48px 24px 64px;
+  padding: 24px 24px 120px;
+}
+
+/* ----------------------- top bar ------------------------ */
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 4px 0 20px;
+}
+
+.bgm-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: url('/cursor-pointer.svg') 9 2, pointer;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+.bgm-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-elev);
+}
+.bgm-toggle[aria-pressed='true'] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.bgm-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+.bgm-toggle-label {
+  letter-spacing: 0.02em;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-elev);
+}
+.theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+.theme-toggle-label {
+  letter-spacing: 0.02em;
 }
 
 /* ----------------------- header ------------------------- */
 
+.header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 4px;
+  color: var(--accent);
+}
+.header .mascot-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
 .title {
-  font-size: 32px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--accent);
   margin: 0;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 @media (min-width: 640px) {
   .title {
-    font-size: 48px;
+    font-size: 52px;
   }
 }
 
 .rule {
   color: var(--border);
-  margin: 4px 0 8px;
-  font-size: 32px;
+  margin: 4px 0 10px;
+  font-size: 22px;
   line-height: 1;
   user-select: none;
   letter-spacing: -0.04em;
-}
-@media (min-width: 640px) {
-  .rule {
-    font-size: 48px;
-  }
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .tagline {
   color: var(--text-dim);
   margin: 0 0 32px;
   font-size: 14px;
+  font-family: var(--mono);
 }
 
 /* ----------------------- play card ---------------------- */
 
 .play-card {
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
   padding: 14px 16px;
   margin: 0 0 40px;
   display: flex;
@@ -112,12 +283,14 @@ main {
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  background: transparent;
+  border-radius: 6px;
 }
 
 .play-card .label {
   color: var(--text-dim);
   margin-right: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
 }
 .play-card code {
   font-family: var(--mono);
@@ -127,7 +300,7 @@ main {
 }
 .copy-btn {
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--accent);
   background: transparent;
   border: none;
@@ -152,22 +325,24 @@ main {
   margin: 0 0 6px;
 }
 .section-head h2 {
-  font-size: 20px;
-  font-weight: 500;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
   color: var(--accent);
   margin: 0;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
 }
 .version-select {
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   background: transparent;
   color: var(--text-dim);
   border: none;
   appearance: none;
   padding: 2px 16px 2px 4px;
   cursor: pointer;
-  background-image: linear-gradient(45deg, transparent 50%, var(--text-dim) 50%),
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-dim) 50%),
     linear-gradient(135deg, var(--text-dim) 50%, transparent 50%);
   background-position:
     calc(100% - 9px) calc(50% + 1px),
@@ -195,6 +370,7 @@ main {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  font-family: var(--mono);
 }
 .board thead th {
   text-align: left;
@@ -209,9 +385,6 @@ main {
 .board thead th.col-score,
 .board thead th.col-games {
   text-align: right;
-  width: 8ch;
-}
-.board thead th.col-tier {
   width: 8ch;
 }
 .board thead th.col-seen {
@@ -238,7 +411,7 @@ main {
 }
 
 .board tbody td {
-  padding: 6px 8px;
+  padding: 7px 8px;
 }
 .board tbody td.r-rank {
   color: var(--text-dim);
@@ -248,41 +421,40 @@ main {
 .board tbody td.r-seen {
   text-align: right;
 }
-.board tbody td.r-tier {
-  color: var(--text-dim);
-}
 .board tbody td.r-seen {
   color: var(--text-dim);
 }
 
-/* Top-3 treatment. No shadows on 2/3, subtle glow on #1 only. */
+/* Top-3 treatment — subtle glow only on #1 */
 .board tbody tr.rank-1 td {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent);
 }
-.board tbody tr.rank-1 td.r-tier,
 .board tbody tr.rank-1 td.r-seen {
   color: var(--accent);
   opacity: 0.8;
 }
 .board tbody tr.rank-1 {
-  background: linear-gradient(90deg, rgba(204, 120, 92, 0.06), transparent 70%);
-  box-shadow: inset 0 0 24px rgba(204, 120, 92, 0.12);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 10%, transparent),
+    transparent 70%
+  );
+  box-shadow: inset 0 0 24px
+    color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .board tbody tr.rank-2 td {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent-soft);
 }
-.board tbody tr.rank-2 td.r-tier,
 .board tbody tr.rank-2 td.r-seen {
   color: var(--accent-soft);
   opacity: 0.8;
 }
 .board tbody tr.rank-3 td {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent-deeper);
 }
-.board tbody tr.rank-3 td.r-tier,
 .board tbody tr.rank-3 td.r-seen {
   color: var(--accent-deeper);
   opacity: 0.85;
@@ -298,7 +470,7 @@ main {
   display: inline-block;
   background: var(--border);
   color: transparent;
-  border-radius: 1px;
+  border-radius: 2px;
   animation: skeleton-pulse 1.4s ease-in-out infinite;
 }
 @keyframes skeleton-pulse {
@@ -319,12 +491,13 @@ main {
 
 /* Empty + error states */
 .state-panel {
-  border-top: 2px solid var(--border);
-  border-bottom: 2px solid var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 40px 16px;
   text-align: center;
   color: var(--text-dim);
   margin-bottom: 16px;
+  font-family: var(--mono);
 }
 .state-panel .prompt {
   color: var(--accent);
@@ -337,13 +510,14 @@ main {
 }
 .retry-btn {
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--accent);
   background: transparent;
   border: 1px solid var(--accent);
   padding: 4px 12px;
   margin-left: 12px;
   cursor: pointer;
+  border-radius: 3px;
 }
 .retry-btn:hover {
   color: var(--bg);
@@ -359,6 +533,7 @@ main {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--mono);
 }
 .meta .refresh-dots {
   display: inline-block;
@@ -376,6 +551,7 @@ footer.page-footer {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
+  font-family: var(--mono);
 }
 footer.page-footer a {
   color: var(--text-dim);
@@ -385,17 +561,48 @@ footer.page-footer a:hover {
   color: var(--accent);
 }
 
+/* ----------------------- sticky bottom bar -------------- */
+
+.made-by {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 10px 16px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: saturate(160%) blur(8px);
+  -webkit-backdrop-filter: saturate(160%) blur(8px);
+  border-top: 1px solid var(--border);
+}
+.made-by .heart {
+  color: var(--accent);
+  display: inline-block;
+  transform: translateY(1px);
+  margin: 0 2px;
+}
+.made-by a {
+  color: var(--text);
+  border-bottom: 1px dotted var(--border-strong);
+}
+.made-by a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
 /* ----------------------- mobile ------------------------- */
 
 @media (max-width: 640px) {
+  main {
+    padding: 16px 16px 110px;
+  }
   .board thead th.col-games,
   .board tbody td.r-games,
   .board .underline-row td.r-games {
-    display: none;
-  }
-  .board thead th.col-tier,
-  .board tbody td.r-tier,
-  .board .underline-row td.r-tier {
     display: none;
   }
   .board thead th.col-seen,
@@ -407,7 +614,7 @@ footer.page-footer a:hover {
     padding-top: 0;
     padding-bottom: 10px;
     color: var(--text-dim);
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 @media (min-width: 641px) {

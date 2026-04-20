@@ -14,3 +14,7 @@ web/.next/
 
 # Vercel
 .vercel/
+
+# Local design experiments (not committed)
+design-*.html
+design-*.png
