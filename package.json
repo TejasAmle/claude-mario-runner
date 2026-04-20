@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
