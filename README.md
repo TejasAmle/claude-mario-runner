@@ -51,6 +51,25 @@ Or during development (no build step):
 npm run dev
 ```
 
+## Global leaderboard
+
+Every new personal best auto-submits to the public board at **https://claude-mario-runner.vercel.app**.
+
+The first time you play, you'll be prompted for a handle (2–24 chars, lowercase letters/digits/dash). Leave it blank to play offline — nothing is submitted.
+
+```bash
+claude-mario login <handle>    # set a handle locally
+claude-mario login             # sign in with GitHub (gets a ✓ verified badge)
+claude-mario whoami            # show current handle + identity
+claude-mario leaderboard       # print the current top scores
+claude-mario submit-disable    # opt out of submissions
+claude-mario logout            # clear local profile
+```
+
+If the network is down when you hit a new best, the submit is parked in a local queue (`~/.claude-mario-runner/submit-queue.jsonl`) and retried the next time you launch the game.
+
+The profile lives at `~/.claude-mario-runner/profile.json` (mode `0600`). A GitHub access token is only stored there after `login` (scope: `read:user`).
+
 ## Controls
 
 | Key                 | Action                |
@@ -129,8 +148,14 @@ src/
 ├── engine/        # renderer, input, main loop, terminal alt-screen
 ├── game/          # physics, runner, obstacles, world (tiers + spawning), score
 ├── assets/        # sprite/glyph definitions
+├── net/           # leaderboard submit, offline queue, GH device-flow, profile
 ├── app.ts         # state machine: title → playing → gameover
+├── cli.ts         # subcommand dispatch (login, whoami, leaderboard, …)
 └── index.ts       # entry point
+
+web/               # Next.js app deployed to Vercel — API + leaderboard page
+├── app/           # / (leaderboard UI) + /api/submit + /api/leaderboard
+└── lib/           # Redis keys, rate limits, validation, types
 ```
 
 - **Fixed 30 Hz timestep** for deterministic physics across terminals

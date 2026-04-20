@@ -25,10 +25,16 @@ src/
 ├── engine/        # low-level: renderer, input, loop, terminal alt-screen
 ├── game/          # physics, runner, obstacles, world (tiers), score
 ├── assets/        # sprite/glyph definitions
+├── net/           # leaderboard submit, queue, GH device-flow, profile
 ├── app.ts         # state machine: title → playing → gameover
+├── cli.ts         # subcommand dispatch (login, whoami, leaderboard, …)
 └── index.ts       # entry point
 
-tests/             # vitest; 42 tests covering physics/input/loop/runner/world
+web/               # Next.js app deployed to Vercel
+├── app/           # / leaderboard UI + /api/submit + /api/leaderboard
+└── lib/           # Redis keys, rate limits, validation, shared types
+
+tests/             # vitest; covers physics/input/loop/runner/world + net
 scripts/           # non-test utilities (e.g. clearability-sim.ts)
 ```
 
@@ -99,9 +105,18 @@ Terminal stdin doesn't reliably report keydown/keyup. We approximate key-hold: e
   - If you change one without the other, visuals and collisions desync.
 - Don't add `.env` or secrets; this is a pure local CLI game.
 
+## Leaderboard architecture (v0.2)
+
+- **Web app** (`web/`, Next.js 16 App Router on Vercel Fluid Compute): serves the public leaderboard page and two Route Handlers.
+  - `POST /api/submit` — validates body, checks rate limits + reserved handles + min client version, does an `ZADD GT` into a Redis sorted set so only strictly-greater PBs update.
+  - `GET /api/leaderboard` — `ZREVRANGE` top N + pipelined `HMGET` for per-user metadata. `Cache-Control: s-maxage=15, stale-while-revalidate=30`.
+- **Storage**: Upstash Redis (provisioned via Vercel Marketplace). Keys live in `web/lib/redis.ts` — all versioned under `LEADERBOARD_VERSION`.
+- **Identity**: `local` by default (handle honor-system). `github` verified via device-flow OAuth (`read:user` scope); the token is stored locally in `~/.claude-mario-runner/profile.json` with mode `0600`.
+- **CLI submit path**: `net/leaderboard.ts` fires off submit after game-over. Retriable failures (network / 5xx / 429) get parked in `net/queue.ts` JSONL; drained best-effort on next launch.
+- **Schema changes are breaking**: shared types live in both `web/lib/types.ts` and `src/net/types.ts` (duplicated, must stay in sync). Any shape change → bump `MIN_CLIENT_VERSION` in `web/lib/redis.ts` + cut a CLI release.
+
 ## What NOT to do
 
-- Don't introduce Next.js, React, Vercel, or any web framework. Pure Node.js CLI.
-- Don't add network calls, analytics, telemetry.
 - Don't amend prior commits — make new ones.
 - Don't skip pre-commit hooks (none configured, but if added later, respect them).
+- Don't add analytics/telemetry beyond the leaderboard submit. The CLI only contacts the leaderboard endpoint, and only with the user's chosen handle + the game's score/tier/version.

@@ -28,6 +28,7 @@ import {
   COLOR_ACCENT,
 } from './assets/sprites.js';
 import { distanceToScore, loadHighScore, saveHighScore } from './game/score.js';
+import { submitScoreInBackground } from './net/leaderboard.js';
 
 type Phase = 'title' | 'playing' | 'gameover';
 
@@ -179,6 +180,8 @@ function drawGameOver(s: AppState): void {
 export interface RunOptions {
   seed?: number;
   noColor?: boolean;
+  /** CLI semver; passed to the leaderboard submit payload. */
+  version?: string;
 }
 
 export function runGame(opts: RunOptions = {}): void {
@@ -241,6 +244,17 @@ export function runGame(opts: RunOptions = {}): void {
         if (state.score > state.highScore) {
           state.highScore = state.score;
           saveHighScore(state.highScore);
+        }
+        // Fire-and-forget leaderboard submit. No-op if no handle configured.
+        // The network call runs detached; it either succeeds, gets parked in
+        // the offline queue (retriable failure), or dropped (4xx).
+        if (opts.version) {
+          void submitScoreInBackground({
+            score: state.score,
+            tier: state.world.tier,
+            version: opts.version,
+            playTimeSec: state.world.elapsedSec,
+          });
         }
       }
     },

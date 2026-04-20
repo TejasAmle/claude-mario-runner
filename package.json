@@ -1,6 +1,6 @@
 {
   "name": "claude-mario-runner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Terminal platformer — Claude Code themed Mario-style runner",
   "type": "module",
   "bin": {

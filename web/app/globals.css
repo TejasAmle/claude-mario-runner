@@ -1,0 +1,417 @@
+/* ----------------------------------------------------------------------- *
+ * claude-mario-runner leaderboard — palette + typography.
+ * All color decisions live in CSS custom properties so a future light-mode
+ * could drop in by overriding :root.
+ * ----------------------------------------------------------------------- */
+
+:root {
+  --bg: #1a1815;
+  --bg-elev: #252320;
+  --border: #3a352e;
+  --text: #f5f4ef;
+  --text-dim: #8b857a;
+  --accent: #cc785c;
+  --accent-soft: #e89a7d;
+  --accent-deeper: #a15843;
+  --success: #8fbc6a;
+  --danger: #d9684b;
+
+  --mono:
+    ui-monospace, 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a:hover {
+  color: var(--accent-soft);
+  border-bottom-color: var(--accent-soft);
+}
+a:focus-visible,
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+/* ----------------------- header ------------------------- */
+
+.title {
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  margin: 0;
+  line-height: 1.1;
+}
+@media (min-width: 640px) {
+  .title {
+    font-size: 48px;
+  }
+}
+
+.rule {
+  color: var(--border);
+  margin: 4px 0 8px;
+  font-size: 32px;
+  line-height: 1;
+  user-select: none;
+  letter-spacing: -0.04em;
+}
+@media (min-width: 640px) {
+  .rule {
+    font-size: 48px;
+  }
+}
+
+.tagline {
+  color: var(--text-dim);
+  margin: 0 0 32px;
+  font-size: 14px;
+}
+
+/* ----------------------- play card ---------------------- */
+
+.play-card {
+  border: 2px solid var(--border);
+  padding: 14px 16px;
+  margin: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: transparent;
+}
+
+.play-card .label {
+  color: var(--text-dim);
+  margin-right: 6px;
+}
+.play-card code {
+  font-family: var(--mono);
+  color: var(--text);
+  background: transparent;
+  font-size: 14px;
+}
+.copy-btn {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.copy-btn:hover {
+  color: var(--accent-soft);
+}
+.copy-btn:disabled {
+  color: var(--success);
+  cursor: default;
+}
+
+/* ----------------------- section header ----------------- */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 6px;
+}
+.section-head h2 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--accent);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+.version-select {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  appearance: none;
+  padding: 2px 16px 2px 4px;
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-dim) 50%),
+    linear-gradient(135deg, var(--text-dim) 50%, transparent 50%);
+  background-position:
+    calc(100% - 9px) calc(50% + 1px),
+    calc(100% - 5px) calc(50% + 1px);
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+}
+.version-select:hover {
+  color: var(--text);
+}
+
+.double-rule {
+  color: var(--border);
+  font-size: 14px;
+  line-height: 1;
+  margin: 0 0 16px;
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ----------------------- table -------------------------- */
+
+.board {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.board thead th {
+  text-align: left;
+  font-weight: 400;
+  color: var(--text-dim);
+  padding: 4px 8px;
+  border-bottom: none;
+}
+.board thead th.col-rank {
+  width: 3ch;
+}
+.board thead th.col-score,
+.board thead th.col-games {
+  text-align: right;
+  width: 8ch;
+}
+.board thead th.col-tier {
+  width: 8ch;
+}
+.board thead th.col-seen {
+  text-align: right;
+  width: 10ch;
+}
+
+.board .underline-row td {
+  color: var(--border);
+  padding: 0 8px 8px;
+  user-select: none;
+}
+.board .underline-row td.r-score,
+.board .underline-row td.r-games,
+.board .underline-row td.r-seen {
+  text-align: right;
+}
+
+.board tbody tr {
+  transition: background-color 120ms ease;
+}
+.board tbody tr:hover {
+  background: var(--bg-elev);
+}
+
+.board tbody td {
+  padding: 6px 8px;
+}
+.board tbody td.r-rank {
+  color: var(--text-dim);
+}
+.board tbody td.r-score,
+.board tbody td.r-games,
+.board tbody td.r-seen {
+  text-align: right;
+}
+.board tbody td.r-tier {
+  color: var(--text-dim);
+}
+.board tbody td.r-seen {
+  color: var(--text-dim);
+}
+
+/* Top-3 treatment. No shadows on 2/3, subtle glow on #1 only. */
+.board tbody tr.rank-1 td {
+  font-weight: 700;
+  color: var(--accent);
+}
+.board tbody tr.rank-1 td.r-tier,
+.board tbody tr.rank-1 td.r-seen {
+  color: var(--accent);
+  opacity: 0.8;
+}
+.board tbody tr.rank-1 {
+  background: linear-gradient(90deg, rgba(204, 120, 92, 0.06), transparent 70%);
+  box-shadow: inset 0 0 24px rgba(204, 120, 92, 0.12);
+}
+.board tbody tr.rank-2 td {
+  font-weight: 700;
+  color: var(--accent-soft);
+}
+.board tbody tr.rank-2 td.r-tier,
+.board tbody tr.rank-2 td.r-seen {
+  color: var(--accent-soft);
+  opacity: 0.8;
+}
+.board tbody tr.rank-3 td {
+  font-weight: 700;
+  color: var(--accent-deeper);
+}
+.board tbody tr.rank-3 td.r-tier,
+.board tbody tr.rank-3 td.r-seen {
+  color: var(--accent-deeper);
+  opacity: 0.85;
+}
+
+.verified {
+  color: var(--success);
+  margin-left: 4px;
+}
+
+/* Skeleton rows */
+.skeleton-block {
+  display: inline-block;
+  background: var(--border);
+  color: transparent;
+  border-radius: 1px;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+/* Empty + error states */
+.state-panel {
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+.state-panel .prompt {
+  color: var(--accent);
+  display: block;
+  margin-top: 8px;
+}
+.state-panel.error-panel {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.retry-btn {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 4px 12px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.retry-btn:hover {
+  color: var(--bg);
+  background: var(--accent);
+}
+
+/* Footer meta line */
+
+.meta {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin: 16px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meta .refresh-dots {
+  display: inline-block;
+  width: 24px;
+  color: var(--accent);
+  transition: opacity 200ms;
+}
+
+footer.page-footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 13px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+footer.page-footer a {
+  color: var(--text-dim);
+  border-bottom: none;
+}
+footer.page-footer a:hover {
+  color: var(--accent);
+}
+
+/* ----------------------- mobile ------------------------- */
+
+@media (max-width: 640px) {
+  .board thead th.col-games,
+  .board tbody td.r-games,
+  .board .underline-row td.r-games {
+    display: none;
+  }
+  .board thead th.col-tier,
+  .board tbody td.r-tier,
+  .board .underline-row td.r-tier {
+    display: none;
+  }
+  .board thead th.col-seen,
+  .board tbody td.r-seen,
+  .board .underline-row td.r-seen {
+    display: none;
+  }
+  .board tbody tr.mobile-meta-row td {
+    padding-top: 0;
+    padding-bottom: 10px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+}
+@media (min-width: 641px) {
+  .board tbody tr.mobile-meta-row {
+    display: none;
+  }
+}

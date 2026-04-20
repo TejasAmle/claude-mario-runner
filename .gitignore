@@ -5,3 +5,12 @@ coverage/
 .DS_Store
 .env
 .env.local
+.env*.local
+
+# Next.js (web/)
+.next/
+web/.next/
+*.tsbuildinfo
+
+# Vercel
+.vercel/
