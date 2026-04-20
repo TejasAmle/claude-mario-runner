@@ -1,6 +1,12 @@
 # claude-mario-runner
 
+[![npm version](https://img.shields.io/npm/v/claude-mario-runner.svg)](https://www.npmjs.com/package/claude-mario-runner)
+[![CI](https://github.com/TejasAmle/claude-mario-runner/actions/workflows/ci.yml/badge.svg)](https://github.com/TejasAmle/claude-mario-runner/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/claude-mario-runner.svg)](./LICENSE)
+
 A Chrome-dino-style infinite runner that lives in your terminal. Claude Code themed — dodge bugs, merge conflicts, walls, exceptions, and drones.
+
+📦 **npm:** https://www.npmjs.com/package/claude-mario-runner
 
 ```
 score 0                              tier easy                           best  0
@@ -15,6 +21,21 @@ score 0                              tier easy                           best  0
 ## Install & run
 
 Requires Node.js ≥ 20.
+
+### Play instantly (no install)
+
+```bash
+npx claude-mario-runner
+```
+
+### Install globally
+
+```bash
+npm install -g claude-mario-runner
+claude-mario
+```
+
+### From source
 
 ```bash
 git clone https://github.com/TejasAmle/claude-mario-runner.git
