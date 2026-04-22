@@ -7,7 +7,7 @@
 
 A Chrome-dino-style infinite runner that lives in your terminal. Claude Code themed — dodge bugs, merge conflicts, walls, exceptions, and drones.
 
-🏆 **Leaderboard:** https://claude-mario-runner.vercel.app &nbsp;·&nbsp; 📦 **npm:** https://www.npmjs.com/package/claude-mario-runner
+🏆 **Leaderboard:** https://claude-mario-runner.vercel.app &nbsp;·&nbsp; 📦 **npm:** https://www.npmjs.com/package/claude-mario-runner &nbsp;·&nbsp; 📝 **Blog:** [I built and shipped a game this weekend](https://medium.com/@tejas_amle/i-built-and-shipped-a-game-this-weekend-thats-not-the-interesting-part-11f4be3d7854) ([mirror](./BLOG.md))
 
 ```
 score 0                              tier easy                           best  0
