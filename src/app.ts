@@ -48,9 +48,21 @@ interface AppState {
 }
 
 // Terminal key-repeat approximates key-hold: each Down press extends crouch
-// window by this many ms. Typical repeat delay after first press is ~30-50ms
-// on macOS; 200 ms is well beyond that.
-const CROUCH_HOLD_EXTEND_MS = 200;
+// window by this many ms.
+//
+// IMPORTANT: macOS (and most OSes) have a two-stage key repeat:
+//   1. Initial delay before repeat starts: typically ~300-500 ms (configurable
+//      via System Settings → Keyboard → "Delay until repeat"). Default is
+//      ~500 ms; even the fastest user setting is ~250 ms.
+//   2. Sustained repeat rate after that: ~30-50 ms.
+//
+// If this constant is shorter than (1), the crouch expires *before* the first
+// auto-repeat lands, so a held ↓ visibly pops back up and re-crouches. We pick
+// 550 ms so the window always survives the slowest reasonable initial delay.
+// The trade-off: after release, the mascot stays crouched for up to ~550 ms.
+// In practice that's fine for a runner — you usually release ↓ a moment
+// before the next obstacle anyway.
+const CROUCH_HOLD_EXTEND_MS = 550;
 
 const MIN_COLS = 40;
 const MIN_ROWS = 12;
