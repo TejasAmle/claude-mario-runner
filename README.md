@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/npm/l/claude-mario-runner.svg)](./LICENSE)
 [![leaderboard](https://img.shields.io/badge/🏆_global_leaderboard-claude--mario--runner.vercel.app-cc785c)](https://claude-mario-runner.vercel.app)
 
-A Chrome-dino-style infinite runner that lives in your terminal. Claude Code themed — dodge bugs, merge conflicts, walls, exceptions, and drones.
+A Chrome-dino-style infinite runner that lives in your terminal. Claude Code themed — dodge bugs, merge conflicts, walls, exceptions, timeouts, and drones.
 
 🏆 **Leaderboard:** https://claude-mario-runner.vercel.app &nbsp;·&nbsp; 📦 **npm:** https://www.npmjs.com/package/claude-mario-runner &nbsp;·&nbsp; 📝 **Blog:** [I built and shipped a game this weekend](https://medium.com/@tejas_amle/i-built-and-shipped-a-game-this-weekend-thats-not-the-interesting-part-11f4be3d7854) ([mirror](./BLOG.md))
 
@@ -90,9 +90,12 @@ The profile lives at `~/.claude-mario-runner/profile.json` (mode `0600`). A GitH
 | `conflict`  | `▓▓▓` | 3×2   | Jump         | Easy+               |
 | `wall`      | `██`  | 2×3   | Jump         | Medium+             |
 | `exception` | `▒▒▒` | 3×3   | Jump         | Hard+               |
+| `timeout`   | `█████` | 5×2  | Jump         | Hard+               |
 | `drone`     | `◆`   | 4×10  | **Crouch**   | Medium+             |
 
 Drones are aerial — they hover right through the full jump arc, so jumping won't save you. You have to duck.
+
+Timeouts are wide ground obstacles representing stalled requests — wider than a conflict, so they require a well-timed jump.
 
 ## Difficulty tiers
 
@@ -100,7 +103,7 @@ Drones are aerial — they hover right through the full jump arc, so jumping won
 | ------ | --------- | ----- | ------- | ------- | ----------- | ---------- |
 | easy   | 0 s       | 22    | 30      | 46      | 0%          | bug, conflict |
 | medium | 30 s      | 26    | 22      | 34      | 18%         | + wall, drone |
-| hard   | 75 s      | 38    | 16      | 26      | 25%         | + exception |
+| hard   | 75 s      | 38    | 16      | 26      | 25%         | + exception, timeout |
 | insane | 120 s     | 52    | 12      | 20      | 32%         | all |
 
 Speed eases smoothly between tiers — no teleport at boundaries.
@@ -165,6 +168,10 @@ web/               # Next.js app deployed to Vercel — API + leaderboard page
 - **Seeded PRNG** (mulberry32) for reproducible obstacle sequences
 - **AABB collisions** — hitbox smaller than sprite for forgiving play
 - **Time-based tiering** on `elapsedSec`, not distance, so difficulty ramps at real-world seconds regardless of terminal width
+
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions, how to add new obstacle types, and the PR checklist.
 
 ## License
 
