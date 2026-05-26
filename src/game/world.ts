@@ -47,7 +47,7 @@ export const DEFAULT_TIERS: readonly Tier[] = [
     minGap: 16,
     maxGap: 26,
     aerialProb: 0.25,
-    allowedKinds: ['bug', 'conflict', 'wall', 'exception', 'drone'],
+    allowedKinds: ['bug', 'conflict', 'wall', 'exception', 'drone', 'timeout'],
   },
   {
     name: 'insane',
@@ -56,7 +56,7 @@ export const DEFAULT_TIERS: readonly Tier[] = [
     minGap: 12,
     maxGap: 20,
     aerialProb: 0.32,
-    allowedKinds: ['bug', 'conflict', 'wall', 'exception', 'drone'],
+    allowedKinds: ['bug', 'conflict', 'wall', 'exception', 'drone', 'timeout'],
   },
 ];
 

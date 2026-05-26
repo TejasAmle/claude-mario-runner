@@ -1,6 +1,6 @@
 import { type AABB } from './physics.js';
 
-export type ObstacleKind = 'bug' | 'conflict' | 'wall' | 'exception' | 'drone';
+export type ObstacleKind = 'bug' | 'conflict' | 'wall' | 'exception' | 'drone' | 'timeout';
 
 export interface ObstacleSpec {
   kind: ObstacleKind;
@@ -16,6 +16,9 @@ export const OBSTACLE_SPECS: Record<ObstacleKind, ObstacleSpec> = {
   wall: { kind: 'wall', w: 2, h: 3, label: 'wall', aerial: false },
   exception: { kind: 'exception', w: 3, h: 3, label: 'exception', aerial: false },
   drone: { kind: 'drone', w: 4, h: 10, label: 'drone', aerial: true },
+  // timeout: wider than conflict but shorter than wall — represents a stalled
+  // request blocking the pipeline. Appears only in hard/insane tiers.
+  timeout: { kind: 'timeout', w: 5, h: 2, label: 'timeout', aerial: false },
 };
 
 // Aerial obstacles sit 3 cells above ground with h=10, so rows span
@@ -63,6 +66,7 @@ export function pickNextKind(
     wall: 0.3 + 0.5 * d,
     exception: 0.1 + 0.8 * d,
     drone: 0, // handled above
+    timeout: 0.15 + 0.6 * d, // becomes progressively more common at higher difficulty
   };
   const entries: Array<[ObstacleKind, number]> = allowed
     .filter((k) => k !== 'drone')
